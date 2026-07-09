@@ -1,34 +1,48 @@
 # Open Service Booking Protocol (OSBP)
 
-An open protocol that lets an AI agent book a real service appointment, but only
-inside a scoped, user-approved authorization called a `BookingMandate`.
+OSBP is an open protocol layer for AI-assisted service booking. It lets an
+agent book an appointment only inside a scoped, user-approved authorization
+called a `BookingMandate`.
 
 ```text
-Customer <-> AI agent <-> OSBP <-> booking platform
+Customer <-> AI agent <-> OSBP server <-> booking platform
 ```
 
-Communication is bidirectional; authority is directional. Every booking action
-stays inside what the customer approved.
-
-OSBP is an open standard, first published in 2026 by [Andy Volk](https://andyvolk.com/).
-Background and rationale: [osbp.dev](https://osbp.dev).
+MCP carries the transport. OSBP defines the booking tools, mandate validation,
+failure shape, and audit expectations around a provider-bound appointment.
 
 ## Start here
 
-- **Read the spec** — the normative contract: tools, mandate enforcement, audit, and time discipline. [osbp-dev/osbp](https://github.com/osbp-dev/osbp)
-- **Try it, no credentials** — a reference backend with four synthetic verticals runs the full booking loop locally.
-- **Write an adapter** — map your booking platform to OSBP with the starter kit, then prove it against the conformance kit.
-- **Contribute** — see `CONTRIBUTING.md` in the main repo.
-- **Why this exists** — [osbp.dev](https://osbp.dev)
+- **Canonical site:** [osbp.dev](https://osbp.dev)
+- **Specification and reference implementation:** [osbp-dev/osbp](https://github.com/osbp-dev/osbp)
+- **Versioned spec:** [v0.1.0](https://osbp.dev/spec/v0.1.0/)
+- **Local demo:** run `npm run demo` in `osbp-dev/osbp`
+- **Contributing:** see `CONTRIBUTING.md` in the main repo
 
-## Status
+## v0.1.0 status
 
 [![latest release](https://img.shields.io/github/v/release/osbp-dev/osbp?label=release)](https://github.com/osbp-dev/osbp/releases)
 [![released](https://img.shields.io/github/release-date/osbp-dev/osbp?label=shipped)](https://github.com/osbp-dev/osbp/releases)
 
-Works end to end against a real booking platform and a credential-free reference
-backend. The release above tracks what is shipped; the contract is formative and
-breaking changes are expected until it stabilizes.
+v0.1.0 is a usable proof and formative contract, not a production maturity
+claim. It demonstrates one small booking loop:
 
-OSBP authorizes the booking, not the payment. It is designed to compose with the
-payment-authority layers converging separately.
+```text
+BookingMandate -> lookup -> policy readback -> user approval -> create -> verification if required -> status -> receipt
+```
+
+The public cut includes protocol docs, a TypeScript protocol core, a local
+stdio MCP server, a credential-free synthetic reference backend, trace tooling,
+a conformance kit, an adapter starter, and an optional Openings integration
+proof for an operator-owned business.
+
+It does not include payments, marketplace search, slot holds, modify/cancel
+flows, production mandate signing, public conformance certification, or a
+universal adapter promise.
+
+OSBP authorizes the booking, not the payment.
+
+## Licensing
+
+Code is licensed under Apache-2.0. Specification prose and documentation are
+licensed under CC-BY-4.0 unless a file states otherwise.
